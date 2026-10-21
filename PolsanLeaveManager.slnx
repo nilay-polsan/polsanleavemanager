@@ -1,0 +1,23 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/PolsanLeaveManager.Audit.Contracts/PolsanLeaveManager.Audit.Contracts.csproj" />
+    <Project Path="src/PolsanLeaveManager.Audit/PolsanLeaveManager.Audit.csproj" />
+    <Project Path="src/PolsanLeaveManager.Calendar.Contracts/PolsanLeaveManager.Calendar.Contracts.csproj" />
+    <Project Path="src/PolsanLeaveManager.Calendar/PolsanLeaveManager.Calendar.csproj" />
+    <Project Path="src/PolsanLeaveManager.LeaveBalance.Contracts/PolsanLeaveManager.LeaveBalance.Contracts.csproj" />
+    <Project Path="src/PolsanLeaveManager.LeaveBalance/PolsanLeaveManager.LeaveBalance.csproj" />
+    <Project Path="src/PolsanLeaveManager.LeaveRequests.Contracts/PolsanLeaveManager.LeaveRequests.Contracts.csproj" />
+    <Project Path="src/PolsanLeaveManager.LeaveRequests/PolsanLeaveManager.LeaveRequests.csproj" />
+    <Project Path="src/PolsanLeaveManager.MedicalLeave.Contracts/PolsanLeaveManager.MedicalLeave.Contracts.csproj" />
+    <Project Path="src/PolsanLeaveManager.MedicalLeave/PolsanLeaveManager.MedicalLeave.csproj" />
+    <Project Path="src/PolsanLeaveManager.Notifications.Contracts/PolsanLeaveManager.Notifications.Contracts.csproj" />
+    <Project Path="src/PolsanLeaveManager.Notifications/PolsanLeaveManager.Notifications.csproj" />
+    <Project Path="src/PolsanLeaveManager.Personnel.Contracts/PolsanLeaveManager.Personnel.Contracts.csproj" />
+    <Project Path="src/PolsanLeaveManager.Personnel/PolsanLeaveManager.Personnel.csproj" />
+    <Project Path="src/PolsanLeaveManager.Web/PolsanLeaveManager.Web.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/PolsanLeaveManager.ArchitectureTests/PolsanLeaveManager.ArchitectureTests.csproj" />
+    <Project Path="tests/PolsanLeaveManager.Web.Tests/PolsanLeaveManager.Web.Tests.csproj" />
+  </Folder>
+</Solution>

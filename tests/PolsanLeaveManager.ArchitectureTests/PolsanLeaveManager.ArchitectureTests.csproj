@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="xunit.v3" />
+    <PackageReference Include="TngTech.ArchUnitNET" />
+    <Using Include="Xunit" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\PolsanLeaveManager.Personnel\PolsanLeaveManager.Personnel.csproj" />
+    <ProjectReference Include="..\..\src\PolsanLeaveManager.Personnel.Contracts\PolsanLeaveManager.Personnel.Contracts.csproj" />
+    <ProjectReference Include="..\..\src\PolsanLeaveManager.LeaveRequests\PolsanLeaveManager.LeaveRequests.csproj" />
+    <ProjectReference Include="..\..\src\PolsanLeaveManager.LeaveRequests.Contracts\PolsanLeaveManager.LeaveRequests.Contracts.csproj" />
+    <ProjectReference Include="..\..\src\PolsanLeaveManager.LeaveBalance\PolsanLeaveManager.LeaveBalance.csproj" />
+    <ProjectReference Include="..\..\src\PolsanLeaveManager.LeaveBalance.Contracts\PolsanLeaveManager.LeaveBalance.Contracts.csproj" />
+    <ProjectReference Include="..\..\src\PolsanLeaveManager.Calendar\PolsanLeaveManager.Calendar.csproj" />
+    <ProjectReference Include="..\..\src\PolsanLeaveManager.Calendar.Contracts\PolsanLeaveManager.Calendar.Contracts.csproj" />
+    <ProjectReference Include="..\..\src\PolsanLeaveManager.MedicalLeave\PolsanLeaveManager.MedicalLeave.csproj" />
+    <ProjectReference Include="..\..\src\PolsanLeaveManager.MedicalLeave.Contracts\PolsanLeaveManager.MedicalLeave.Contracts.csproj" />
+    <ProjectReference Include="..\..\src\PolsanLeaveManager.Notifications\PolsanLeaveManager.Notifications.csproj" />
+    <ProjectReference Include="..\..\src\PolsanLeaveManager.Notifications.Contracts\PolsanLeaveManager.Notifications.Contracts.csproj" />
+    <ProjectReference Include="..\..\src\PolsanLeaveManager.Audit\PolsanLeaveManager.Audit.csproj" />
+    <ProjectReference Include="..\..\src\PolsanLeaveManager.Audit.Contracts\PolsanLeaveManager.Audit.Contracts.csproj" />
+    <ProjectReference Include="..\..\src\PolsanLeaveManager.Web\PolsanLeaveManager.Web.csproj" />
+  </ItemGroup>
+</Project>
