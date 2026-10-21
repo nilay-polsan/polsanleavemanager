@@ -47,6 +47,6 @@
 - Derleyici: `Nullable` enable, `TreatWarningsAsErrors` (`Directory.Build.props`).
 - Analyzer'lar: .NET SDK analyzer'ları (`AnalysisLevel` latest-recommended) + `.editorconfig`.
 - Format: `dotnet format --verify-no-changes`.
-- Mimari sınırlar: NetArchTest testleri (`docs/architecture.md`, Forbidden dependencies).
+- Mimari sınırlar: ArchUnitNET testleri (`docs/architecture.md`, Forbidden dependencies).
 - Bilinen açıklı paketler: `dotnet list package --vulnerable`.
 - Hepsi `scripts/check` içinde (walking skeleton spec'i ile aktifleşir).

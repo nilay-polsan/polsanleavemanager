@@ -61,7 +61,7 @@ namespace'i) ve `<Module>.Contracts` (dışarıya açık arayüzler, DTO'lar, do
   zorunlu / kurum tercihi olarak sınıflandırılır; zorunlu kontrolde `Off` kabul edilmez.
 
 ## Forbidden dependencies (make them testable)
-Her biri NetArchTest mimari testi olarak `scripts/check` içinde zorlanır.
+Her biri ArchUnitNET mimari testi olarak `scripts/check` içinde zorlanır.
 1. Hiçbir modül başka bir modülün `Internal` namespace'ine veya DbContext'ine referans vermez —
    yalnızca `*.Contracts`.
 2. `*.Contracts` projeleri hiçbir modül iç projesine, EF Core'a veya ASP.NET'e bağımlı değildir.
