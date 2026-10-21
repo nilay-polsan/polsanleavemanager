@@ -1,6 +1,6 @@
 # Testing
 
-> **Template — filled during bootstrap.**
+> Bootstrap'ta karara bağlandı (2026-10-19).
 
 ## The contract
 - Every acceptance criterion maps to at least one test (criterion ↔ test map lives in the plan).
@@ -8,10 +8,40 @@
 - The whole suite runs inside `scripts/check` — one command, everywhere.
 
 ## Frameworks & layout
-<!-- Test framework(s), where tests live, naming pattern. -->
+- **xUnit v3** — birim ve entegrasyon testleri. **bUnit** — Blazor bileşen testleri.
+- **NetArchTest** — mimari sınır testleri (`tests/PolsanLeaveManager.ArchitectureTests`).
+- **SQL Server LocalDB** — entegrasyon testleri gerçek SQL Server motoruna karşı (EF InMemory
+  yasak). Testler adanmış `PolsanLeaveTests` örneğini kullanır; test adımı bitince örneği
+  durdurur (Resource hygiene). Önkoşul: Windows + LocalDB (ADR-0002). CI runner'ı Windows'tur.
+- **Playwright for .NET** — e2e, 3–5 kritik akış (talep aç → onayla → bakiye düşer; ret;
+  avans). Headless, tek worker. Uygulamayı (Kestrel, test ortamı) test fixture'ı başlatır ve
+  başarısızlık/timeout dahil her durumda durdurur — app-under-test yaşam döngüsünün tek sahibi fixture'dır.
+- Yerleşim: `tests/PolsanLeaveManager.<Module>.Tests`, `tests/PolsanLeaveManager.Web.Tests`
+  (bUnit), `tests/PolsanLeaveManager.E2E`.
+- Hız ayrımı **trait ile** (selector, liste değil): `[Trait("Category","Integration")]`,
+  `[Trait("Category","E2E")]`. Etiketsiz test = hızlı test. Fast profil etiketsizleri, full-only
+  adımlar yalnızca etiketlileri koşar → "fast ∪ geri kalan = tüm testler".
+- Test isimleri: `docs/conventions.md`, Naming.
 
 ## What must be tested
-<!-- e.g. every business rule (BR-n), every boundary/forbidden dependency, critical flows E2E/smoke. -->
+- Her iş kuralı (BR-n, `docs/domain.md`) en az bir testle; test adında kural no geçer.
+- Her yasak bağımlılık (`docs/architecture.md`) bir mimari testle.
+- Her yetki kuralı (`docs/security.md`): rol başına izinli **ve** reddedilen yol, ayrıca başkasının
+  kaydına erişim denemesi.
+- İş günü/bakiye hesabı sınır değerleri: yıldönümü günü, kıdem 5/15 yıl geçişleri, 18/50 yaş,
+  arife, yıl dönümü, hafta sonuna denk gelen tatil.
+- Ledger değişmezliği: bakiye = hareket toplamı; iptal ters kayıt üretir.
+- Kritik akışlar e2e (yukarıda).
+- Yeniden hesap (BR-24, BR-25): bekleyen talep güncellenir; onaylı talepte İK onayına kadar
+  ledger değişmez; aynı takvim sürümü için ikinci çalıştırma ikinci düzeltme üretmez (idempotent).
+- İptal (BR-26…BR-29): rol × durum × zaman matrisi; "başlamış" sınırı `TimeProvider` ile
+  başlangıç günü 23:59:59 / 00:00:00 (Europe/Istanbul) sınır değerleriyle.
+- FIFO tahsis (BR-30, BR-31): tahsis toplamı = kullanım; en eski yıl önce tükenir; iptal ve
+  kısaltma tahsisi geri alır.
+- Bölme kuralı (BR-21): her kontrol × `Off` / `Warn` / `Block`; zorunlu kontrolde `Off` reddedilir.
+- Son HR koruması (BR-32): iki eşzamanlı rol kaldırma işlemi (gerçek SQL Server, Integration)
+  sonunda en az bir aktif HR kalır. Rol iptali açık bir Blazor oturumunda bir sonraki çağrıda
+  yetkisiz döner (BR-34).
 
 ## Protected-tests rule
 Weakening asserts, deleting, or skipping tests to reach green is forbidden. A red test triggers
@@ -79,6 +109,18 @@ A screenshot proves a criterion only against the spec's "User experience": every
 5. Durations come from check itself (`<== <step> (n s)` per step, the total in the green line).
    Decide a split, or report a profile's duration, on the median of at least 3 runs — single
    runs vary too much to decide on.
+
+## Open technical findings
+- **TF-1 — Bootstrap doğrulaması kabul edilmedi (2026-10-19).** `scripts/check.conf` adımları
+  yorumda olduğundan `./scripts/check` gerçek bir build/test çalıştırmıyor (greenfield no-op);
+  yeşil sonuç kanıt değildir. Kapanış koşulu: walking skeleton spec'inde adımlar aktif,
+  `CHECK GREEN (full, …)` ve her test adımının koşturduğu test sayısı > 0 kanıtlı.
+- **TF-2 — Fast residue testi başarısız (2026-10-19).** `./scripts/residue --fast` iki denemede
+  `RESIDUE FOUND` verdi; kalanlar: `svchost.exe`, `backgroundTaskHost.exe` (Spotlight),
+  `RuntimeBroker.exe`. Check hiç adım çalıştırmadığından bunlar büyük olasılıkla Windows arka plan
+  aktivitesidir, ama doğrulanmadı. Full residue aynı makinede `RESIDUE CLEAN`. Kapanış koşulu:
+  adımlar aktifken boşta bir makinede `./scripts/residue` ve `./scripts/residue --fast` ikisi de
+  `RESIDUE CLEAN`; değilse her kalan süreç bir check adımına bağlanır veya bağlanamayacağı gösterilir.
 
 ## Determinism
 Flaky tests are fixed, not retried or skipped — see R-03. Evidence of a fix: 5 consecutive green runs.
