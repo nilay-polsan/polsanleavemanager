@@ -9,7 +9,7 @@
 
 ## Frameworks & layout
 - **xUnit v3** — birim ve entegrasyon testleri. **bUnit** — Blazor bileşen testleri.
-- **NetArchTest** — mimari sınır testleri (`tests/PolsanLeaveManager.ArchitectureTests`).
+- **ArchUnitNET** (`TngTech.ArchUnitNET`, ADR-0003) — mimari sınır testleri (`tests/PolsanLeaveManager.ArchitectureTests`).
 - **SQL Server LocalDB** — entegrasyon testleri gerçek SQL Server motoruna karşı (EF InMemory
   yasak). Testler adanmış `PolsanLeaveTests` örneğini kullanır; test adımı bitince örneği
   durdurur (Resource hygiene). Önkoşul: Windows + LocalDB (ADR-0002). CI runner'ı Windows'tur.
@@ -111,16 +111,25 @@ A screenshot proves a criterion only against the spec's "User experience": every
    runs vary too much to decide on.
 
 ## Open technical findings
-- **TF-1 — Bootstrap doğrulaması kabul edilmedi (2026-10-19).** `scripts/check.conf` adımları
-  yorumda olduğundan `./scripts/check` gerçek bir build/test çalıştırmıyor (greenfield no-op);
-  yeşil sonuç kanıt değildir. Kapanış koşulu: walking skeleton spec'inde adımlar aktif,
-  `CHECK GREEN (full, …)` ve her test adımının koşturduğu test sayısı > 0 kanıtlı.
-- **TF-2 — Fast residue testi başarısız (2026-10-19).** `./scripts/residue --fast` iki denemede
-  `RESIDUE FOUND` verdi; kalanlar: `svchost.exe`, `backgroundTaskHost.exe` (Spotlight),
-  `RuntimeBroker.exe`. Check hiç adım çalıştırmadığından bunlar büyük olasılıkla Windows arka plan
-  aktivitesidir, ama doğrulanmadı. Full residue aynı makinede `RESIDUE CLEAN`. Kapanış koşulu:
-  adımlar aktifken boşta bir makinede `./scripts/residue` ve `./scripts/residue --fast` ikisi de
-  `RESIDUE CLEAN`; değilse her kalan süreç bir check adımına bağlanır veya bağlanamayacağı gösterilir.
+- **TF-1 — Bootstrap doğrulaması kabul edilmedi (2026-10-19). AÇIK (spec 0001 sonrası, 2026-10-21).**
+  `scripts/check.conf` adımları yorumdaydı; spec 0001 ile `restore`, `format`, `build`, `test-unit`
+  ve `vulnerable-packages` aktif oldu: `CHECK GREEN (full, 5 steps, 25–27 s)`, `test-unit` 24 test
+  koşturuyor (ArchitectureTests 22 + Web.Tests 2; `--minimum-expected-tests 1` sıfır testi hata sayar).
+  Kapanış koşulu ("adımlar aktif") karşılanmadı: `test-integration` ve `test-e2e` yorumda
+  (LocalDB/Playwright sonraki spec'lerde). Test çalıştırıcı: Microsoft.Testing.Platform (xunit.v3,
+  .NET 10'da VSTest desteklenmiyor; `global.json` opt-in).
+- **TF-2 — Fast residue testi başarısız (2026-10-19). AÇIK (ölçüm 2026-10-21, adımlar aktifken).**
+  Her profil 3 kez `./scripts/residue` ile koşturuldu (her koşu check'i iki kez çalıştırır):
+  full → 3/3 `RESIDUE FOUND`; fast → 2/3 `RESIDUE FOUND`, 1/3 `RESIDUE CLEAN`. Kalanlar her koşuda
+  farklı Windows/kullanıcı süreçleri: `svchost`, `RuntimeBroker`, `SearchFilterHost`, `WmiApSrv`,
+  `backgroundTaskHost`, `sppsvc`, bir Chrome `renderer`. Hiçbirinde `dotnet`, `testhost`,
+  `VBCSCompiler`, `MSBuild` veya `sqlservr` yok; bellek farkı −562…+186 MB arasında dalgalandı
+  (full koşu 1'de −562 MB tolerans dışı). Süre medyanı (6 iç check koşusu): full 26 s, fast 19 s.
+  Kalan süreçlerin hiçbiri bir check adımına bağlanamadı; ama makinenin boşta olmadığı ve
+  survivor'un ebeveyn bilgisiyle doğrulanmadığı için "check kaynaklı değil" de kanıtlanmış değil.
+  Kapanış koşulu karşılanmadı. Öneri (spec dışı, onay bekler): `scripts/residue` survivor listesine
+  ebeveyn/başlangıç bilgisi eklenip check'in alt süreç ağacından doğanlar ayrıştırılsın; tolerans
+  ve kontroller gevşetilmesin.
 
 ## Determinism
 Flaky tests are fixed, not retried or skipped — see R-03. Evidence of a fix: 5 consecutive green runs.

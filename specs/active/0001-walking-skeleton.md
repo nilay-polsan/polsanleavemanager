@@ -1,6 +1,6 @@
 # Spec 0001 — Walking skeleton
 
-- Status: Approved
+- Status: In progress
 - Mode: strict
 - Plan: `specs/plans/0001-plan.md`
 
