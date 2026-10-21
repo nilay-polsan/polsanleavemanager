@@ -1,6 +1,6 @@
 # Spec 0001 — Walking skeleton
 
-- Status: In progress
+- Status: Shipped
 - Mode: strict
 - Plan: `specs/plans/0001-plan.md`
 
@@ -55,37 +55,41 @@ kısmen ilerletir; ikisini de kapatmaz (bkz. Constraints).
 - Kod yazımı bu spec'in ANALYZE segmentinde yapılmaz.
 
 ## Acceptance criteria
-- [ ] AC-1 — Çözüm R-1'deki yapıya sahiptir: 7 modül × (iç proje + `*.Contracts`) + `Web`, ve
+- [x] AC-1 — Çözüm R-1'deki yapıya sahiptir: 7 modül × (iç proje + `*.Contracts`) + `Web`, ve
   test projeleri; proje adları `PolsanLeaveManager.<Module>[.Contracts|.Tests]` kalıbına uyar.
-- [ ] AC-2 — `./scripts/check` (full) temiz bir klonda `CHECK GREEN (full, …)` ile biter ve
+- [x] AC-2 — `./scripts/check` (full) temiz bir klonda `CHECK GREEN (full, …)` ile biter ve
   restore, format, build, hızlı test ve açıklı paket adımlarını çalıştırır; build sıfır uyarıyla
   geçer (uyarı = hata).
-- [ ] AC-3 — `./scripts/check --fast` `CHECK GREEN (fast, …)` ile biter.
-- [ ] AC-4 — Her aktif test adımı 0'dan fazla test çalıştırır; sayı check çıktısında görünür.
-- [ ] AC-5 — Forbidden dependencies 1–4'ün her biri için en az bir mimari test vardır ve geçer;
+- [x] AC-3 — `./scripts/check --fast` `CHECK GREEN (fast, …)` ile biter.
+- [x] AC-4 — Her aktif test adımı 0'dan fazla test çalıştırır; sayı check çıktısında görünür.
+- [x] AC-5 — Forbidden dependencies 1–4'ün her biri için en az bir mimari test vardır ve geçer;
   denetlenen modül kümesi boşsa test başarısız olur.
-- [ ] AC-6 — Kök adres başarı yanıtı döner ve sayfada "Polsan İzin Yönetimi" başlığı (tek `h1`,
+- [x] AC-6 — Kök adres başarı yanıtı döner ve sayfada "Polsan İzin Yönetimi" başlığı (tek `h1`,
   `lang="tr"`) bulunur; metin kaynak dosyasındadır.
-- [ ] AC-7 — Var olmayan bir adres Türkçe bulunamadı mesajı ve ana sayfaya giden bağlantı gösterir.
-- [ ] AC-8 — R-6'daki ayarlar etkindir; bir derleyici uyarısı build'i kırar, format ihlali
+- [x] AC-7 — Var olmayan bir adres Türkçe bulunamadı mesajı ve ana sayfaya giden bağlantı gösterir.
+- [x] AC-8 — R-6'daki ayarlar etkindir; bir derleyici uyarısı build'i kırar, format ihlali
   `format` adımını kırar.
-- [ ] AC-9 — CI `check` işi .NET 10 SDK kurar ve `./scripts/check`'i çalıştırır.
-- [ ] AC-10 — `./scripts/residue` ve `./scripts/residue --fast` çalıştırılır; sonuçlar ve iki
+- [x] AC-9 — CI `check` işi .NET 10 SDK kurar ve `./scripts/check`'i çalıştırır.
+- [x] AC-10 — `./scripts/residue` ve `./scripts/residue --fast` çalıştırılır; sonuçlar ve iki
   profilin süresi (en az 3 koşunun medyanı) raporlanır; `docs/testing.md` TF-1 ve TF-2 gerçek
   duruma göre güncellenir, kapanış koşulu karşılanmayan bulgu açık kalır.
 
 ## Definition of Done
-- [ ] Every acceptance criterion mapped to proof (test or reproducible observation)
-- [ ] `scripts/check` green
-- [ ] Independent review done; real findings fixed, noise rejected with written rationale
-- [ ] Docs / ADRs updated if behavior or architecture changed
-- [ ] Spec moved to `specs/done/` (it becomes immutable there)
+- [x] Every acceptance criterion mapped to proof (test or reproducible observation)
+- [x] `scripts/check` green
+- [x] Independent review done; real findings fixed, noise rejected with written rationale
+- [x] Docs / ADRs updated if behavior or architecture changed
+- [x] Spec moved to `specs/done/` (it becomes immutable there)
 
 ## Scorecard (fill at ship — honest numbers make the process improvable)
 | Metric | Value |
 |---|---|
-| Spec revisions | |
-| Fix rounds | |
-| Review findings: real / noise | |
-| Regressions introduced | |
-| Bugs escaped to production | |
+| Spec revisions | not recorded |
+| Fix rounds | 1 |
+| Review findings: real / noise | 6 / 1 (F-7 noise; F-4 investigate, closed by documentation) |
+| Regressions introduced | 0 |
+| Bugs escaped to production | 0 at ship time (no production yet) |
+
+## Open findings at ship
+- TF-1 AÇIK — `test-integration` ve `test-e2e` adımları yorumda; kapanış koşulu karşılanmadı (docs/testing.md).
+- TF-2 AÇIK — residue testi full 3/3, fast 2/3 `RESIDUE FOUND`; kapanış koşulu karşılanmadı (docs/testing.md).
